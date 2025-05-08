@@ -38,6 +38,7 @@ fun AppNavigation() {
         }
         composable("alphabet") {
             AlphabetScreen(
+                viewModel = morseCodeViewModel,
                 onBack = { navController.popBackStack() }
             )
         }

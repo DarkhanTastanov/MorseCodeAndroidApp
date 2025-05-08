@@ -8,12 +8,15 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.morsecode.viewmodel.MorseCodeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlphabetScreen(onBack: () -> Unit) {
+fun AlphabetScreen(
+    viewModel: MorseCodeViewModel,
+    onBack: () -> Unit
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -32,36 +35,17 @@ fun AlphabetScreen(onBack: () -> Unit) {
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
+                val alphabetMap = if (viewModel.language == "RU") russianMorseCodeMap else englishMorseCodeMap
+
                 item {
                     Text(
-                        text = "English Alphabet",
+                        text = if (viewModel.language == "RU") "Russian Alphabet" else "English Alphabet",
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                 }
 
-                items(englishMorseCodeMap.entries.toList()) { (letter, morse) ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(text = letter.toString(), style = MaterialTheme.typography.bodyLarge)
-                        Text(text = morse, style = MaterialTheme.typography.bodyLarge)
-                    }
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "Russian Alphabet",
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-                }
-
-                items(russianMorseCodeMap.entries.toList()) { (letter, morse) ->
+                items(alphabetMap.entries.toList()) { (letter, morse) ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -75,10 +59,4 @@ fun AlphabetScreen(onBack: () -> Unit) {
             }
         }
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewAlphabetScreen() {
-    AlphabetScreen(onBack = {})
 }
