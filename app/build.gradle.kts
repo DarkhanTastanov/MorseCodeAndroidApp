@@ -62,6 +62,6 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.foundation.android)
     implementation(libs.androidx.material3.android)
-    // Optional - For Icons
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.material.icons.extended)
 }
