@@ -32,17 +32,22 @@ fun MorseCodeTranslatorScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(text = if (viewModel.isMorseToText) "Morse to Text" else "Text to Morse")
-                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Spacer(modifier = Modifier.width(16.dp))
+
                         Box {
                             Button(onClick = { viewModel.language = if (viewModel.language == "EN") "RU" else "EN" }) {
                                 Text(text = if (viewModel.language == "EN") "English" else "Russian")
                             }
                         }
-                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Spacer(modifier = Modifier.width(16.dp))
+
                         Switch(
                             checked = viewModel.isMorseToText,
                             onCheckedChange = { viewModel.isMorseToText = it }
                         )
+
                     }
                 }
             )
@@ -66,7 +71,8 @@ fun MorseCodeTranslatorScreen(
                         } else {
                             translateToMorseCode(viewModel.inputText.text, if (viewModel.language == "RU") russianMorseCodeMap else englishMorseCodeMap)
                         },
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground // Use theme color
                     )
                 }
 
@@ -81,7 +87,14 @@ fun MorseCodeTranslatorScreen(
                         value = viewModel.inputText,
                         onValueChange = { viewModel.inputText = it },
                         modifier = Modifier.fillMaxWidth(),
-                        placeholder = { Text("Enter text") }
+                        placeholder = { Text("Enter text") },
+                        colors = TextFieldDefaults.colors( // Use theme colors for TextField
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            disabledContainerColor = MaterialTheme.colorScheme.surface,
+                            focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                            unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                        )
                     )
                 }
             }

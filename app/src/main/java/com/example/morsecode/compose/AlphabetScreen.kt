@@ -41,6 +41,7 @@ fun AlphabetScreen(
                     Text(
                         text = if (viewModel.language == "RU") "Russian Alphabet" else "English Alphabet",
                         style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground, // Use theme color
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                 }
@@ -52,8 +53,8 @@ fun AlphabetScreen(
                             .padding(vertical = 4.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = letter.toString(), style = MaterialTheme.typography.bodyLarge)
-                        Text(text = morse, style = MaterialTheme.typography.bodyLarge)
+                        Text(text = letter.toString(), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground) // Use theme color
+                        Text(text = morse, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground) // Use theme color
                     }
                 }
             }
