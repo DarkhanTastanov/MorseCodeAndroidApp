@@ -13,13 +13,18 @@ import androidx.compose.ui.unit.dp
 fun MorseCodeTranslatorScreen() {
     var inputText by remember { mutableStateOf(TextFieldValue()) }
     var isMorseToText by remember { mutableStateOf(false) }
+    var language by remember { mutableStateOf("EN") }
+    var isDropdownExpanded by remember { mutableStateOf(false) }
 
-    val translatedText = if (isMorseToText) translateToText(inputText.text) else translateToMorseCode(inputText.text)
+    val translatedText = when (language) {
+        "RU" -> if (isMorseToText) translateToText(inputText.text, russianTextMap) else translateToMorseCode(inputText.text, russianMorseCodeMap)
+        else -> if (isMorseToText) translateToText(inputText.text, englishTextMap) else translateToMorseCode(inputText.text, englishMorseCodeMap)
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        // Settings bar with switch
+        // Settings bar
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -28,10 +33,41 @@ fun MorseCodeTranslatorScreen() {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(text = if (isMorseToText) "Morse to Text" else "Text to Morse")
+
+            Box {
+                Button(onClick = { isDropdownExpanded = true }) {
+                    Text(text = when (language) {
+                        "EN" -> "English"
+                        "RU" -> "Russian"
+                        else -> "Select Language"
+                    })
+                }
+
+                DropdownMenu(
+                    expanded = isDropdownExpanded,
+                    onDismissRequest = { isDropdownExpanded = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("English") },
+                        onClick = {
+                            language = "EN"
+                            isDropdownExpanded = false
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text("Russian") },
+                        onClick = {
+                            language = "RU"
+                            isDropdownExpanded = false
+                        }
+                    )
+                }
+            }
+
             Switch(checked = isMorseToText, onCheckedChange = { isMorseToText = it })
         }
 
-        // Displaying translated text
+        // Translated text
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -45,7 +81,7 @@ fun MorseCodeTranslatorScreen() {
             )
         }
 
-        // Text input field
+        // Input field
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -63,41 +99,38 @@ fun MorseCodeTranslatorScreen() {
     }
 }
 
-// Morse code translation logic
-fun translateToMorseCode(text: String): String {
-    val morseCodeMap = mapOf(
-        'A' to ".-", 'B' to "-...", 'C' to "-.-.", 'D' to "-..",
-        'E' to ".", 'F' to "..-.", 'G' to "--.", 'H' to "....",
-        'I' to "..", 'J' to ".---", 'K' to "-.-", 'L' to ".-..",
-        'M' to "--", 'N' to "-.", 'O' to "---", 'P' to ".--.",
-        'Q' to "--.-", 'R' to ".-.", 'S' to "...", 'T' to "-",
-        'U' to "..-", 'V' to "...-", 'W' to ".--", 'X' to "-..-",
-        'Y' to "-.--", 'Z' to "--..",
-        ' ' to "/"
-    )
 
+fun translateToMorseCode(text: String, morseCodeMap: Map<Char, String>): String {
     return text.uppercase().map { char ->
         morseCodeMap[char] ?: ""
     }.joinToString(" ")
 }
 
-// Text to Morse translation logic
-fun translateToText(morse: String): String {
-    val textMap = mapOf(
-        ".-" to "A", "-..." to "B", "-.-." to "C", "-.." to "D",
-        "." to "E", "..-." to "F", "--." to "G", "...." to "H",
-        ".." to "I", ".---" to "J", "-.-" to "K", ".-.." to "L",
-        "--" to "M", "-." to "N", "---" to "O", ".--." to "P",
-        "--.-" to "Q", ".-." to "R", "..." to "S", "-" to "T",
-        "..-" to "U", "...-" to "V", ".--" to "W", "-..-" to "X",
-        "-.--" to "Y", "--.." to "Z",
-        "/" to " "
-    )
-
+fun translateToText(morse: String, textMap: Map<String, String>): String {
     return morse.trim().split(" ").map { code ->
         textMap[code] ?: ""
     }.joinToString("")
 }
+
+val englishMorseCodeMap = mapOf(
+    'A' to ".-", 'B' to "-...", 'C' to "-.-.", 'D' to "-..", 'E' to ".", 'F' to "..-.",
+    'G' to "--.", 'H' to "....", 'I' to "..", 'J' to ".---", 'K' to "-.-", 'L' to ".-..",
+    'M' to "--", 'N' to "-.", 'O' to "---", 'P' to ".--.", 'Q' to "--.-", 'R' to ".-.",
+    'S' to "...", 'T' to "-", 'U' to "..-", 'V' to "...-", 'W' to ".--", 'X' to "-..-",
+    'Y' to "-.--", 'Z' to "--..", ' ' to "/"
+)
+
+val russianMorseCodeMap = mapOf(
+    'А' to ".-", 'Б' to "-...", 'В' to ".--", 'Г' to "--.", 'Д' to "-..", 'Е' to ".",
+    'Ё' to ".", 'Ж' to "...-", 'З' to "--..", 'И' to "..", 'Й' to ".---", 'К' to "-.-",
+    'Л' to ".-..", 'М' to "--", 'Н' to "-.", 'О' to "---", 'П' to ".--.", 'Р' to ".-.",
+    'С' to "...", 'Т' to "-", 'У' to "..-", 'Ф' to "..-.", 'Х' to "....", 'Ц' to "-.-.",
+    'Ч' to "---.", 'Ш' to "----", 'Щ' to "--.-", 'Ъ' to "--.--", 'Ы' to "-.--", 'Ь' to "-..-",
+    'Э' to "..-..", 'Ю' to "..--", 'Я' to ".-.-", ' ' to "/"
+)
+
+val englishTextMap = englishMorseCodeMap.entries.associate { (k, v) -> v to k.toString() }
+val russianTextMap = russianMorseCodeMap.entries.associate { (k, v) -> v to k.toString() }
 
 @Preview(showBackground = true)
 @Composable
