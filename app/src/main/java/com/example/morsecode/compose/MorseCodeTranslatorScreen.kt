@@ -3,11 +3,13 @@ package com.example.morsecode.compose
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.morsecode.viewmodel.CodeMaps
 import com.example.morsecode.viewmodel.MorseCodeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,8 +33,6 @@ fun MorseCodeTranslatorScreen(
                         horizontalArrangement = Arrangement.Center,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(text = if (viewModel.isMorseToText) "Morse to Text" else "Text to Morse")
-
                         Spacer(modifier = Modifier.width(16.dp))
 
                         Box {
@@ -48,8 +48,22 @@ fun MorseCodeTranslatorScreen(
                             onCheckedChange = { viewModel.isMorseToText = it }
                         )
 
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                        Button(
+                            onClick = {
+                                viewModel.playMorseSound()
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.PlayArrow,
+                                contentDescription = "Play Sound"
+                            )
+                        }
                     }
                 }
+
+
             )
         },
         content = { paddingValues ->
@@ -69,7 +83,7 @@ fun MorseCodeTranslatorScreen(
                         text = if (viewModel.isMorseToText) {
                             translateToText(viewModel.inputText.text, if (viewModel.language == "RU") russianTextMap else englishTextMap)
                         } else {
-                            translateToMorseCode(viewModel.inputText.text, if (viewModel.language == "RU") russianMorseCodeMap else englishMorseCodeMap)
+                            translateToMorseCode(viewModel.inputText.text, if (viewModel.language == "RU")  CodeMaps.russianMorseCodeMap else  CodeMaps.englishMorseCodeMap)
                         },
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onBackground // Use theme color
@@ -103,7 +117,6 @@ fun MorseCodeTranslatorScreen(
 }
 
 
-// Morse code translation functions remain unchanged
 fun translateToMorseCode(text: String, morseCodeMap: Map<Char, String>): String {
     return text.uppercase().map { char ->
         morseCodeMap[char] ?: ""
@@ -116,22 +129,6 @@ fun translateToText(morse: String, textMap: Map<String, String>): String {
     }.joinToString("")
 }
 
-val englishMorseCodeMap = mapOf(
-    'A' to ".-", 'B' to "-...", 'C' to "-.-.", 'D' to "-..", 'E' to ".", 'F' to "..-.",
-    'G' to "--.", 'H' to "....", 'I' to "..", 'J' to ".---", 'K' to "-.-", 'L' to ".-..",
-    'M' to "--", 'N' to "-.", 'O' to "---", 'P' to ".--.", 'Q' to "--.-", 'R' to ".-.",
-    'S' to "...", 'T' to "-", 'U' to "..-", 'V' to "...-", 'W' to ".--", 'X' to "-..-",
-    'Y' to "-.--", 'Z' to "--..", ' ' to "/"
-)
 
-val russianMorseCodeMap = mapOf(
-    'А' to ".-", 'Б' to "-...", 'В' to ".--", 'Г' to "--.", 'Д' to "-..", 'Е' to ".",
-    'Ё' to ".", 'Ж' to "...-", 'З' to "--..", 'И' to "..", 'Й' to ".---", 'К' to "-.-",
-    'Л' to ".-..", 'М' to "--", 'Н' to "-.", 'О' to "---", 'П' to ".--.", 'Р' to ".-.",
-    'С' to "...", 'Т' to "-", 'У' to "..-", 'Ф' to "..-.", 'Х' to "....", 'Ц' to "-.-.",
-    'Ч' to "---.", 'Ш' to "----", 'Щ' to "--.-", 'Ъ' to "--.--", 'Ы' to "-.--", 'Ь' to "-..-",
-    'Э' to "..-..", 'Ю' to "..--", 'Я' to ".-.-", ' ' to "/"
-)
-
-val englishTextMap = englishMorseCodeMap.entries.associate { (k, v) -> v to k.toString() }
-val russianTextMap = russianMorseCodeMap.entries.associate { (k, v) -> v to k.toString() }
+val englishTextMap = CodeMaps.englishMorseCodeMap.entries.associate { (k, v) -> v to k.toString() }
+val russianTextMap = CodeMaps.russianMorseCodeMap.entries.associate { (k, v) -> v to k.toString() }

@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.morsecode.viewmodel.CodeMaps
 import com.example.morsecode.viewmodel.MorseCodeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,13 +36,13 @@ fun AlphabetScreen(
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-                val alphabetMap = if (viewModel.language == "RU") russianMorseCodeMap else englishMorseCodeMap
+                val alphabetMap = if (viewModel.language == "RU")  CodeMaps.russianMorseCodeMap else  CodeMaps.englishMorseCodeMap
 
                 item {
                     Text(
                         text = if (viewModel.language == "RU") "Russian Alphabet" else "English Alphabet",
                         style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onBackground, // Use theme color
+                        color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
                 }
