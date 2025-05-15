@@ -53,6 +53,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(project(":domain"))
+    implementation(project(":data"))
+    implementation(libs.google.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -69,9 +71,15 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
 //
 ////    firebase
-//    implementation(platform(libs.firebase.bom))
+    implementation(platform(libs.firebase.bom))
 //    implementation(libs.firebase.firestore.ktx)
-//    implementation(libs.firebase.auth)
+    implementation(libs.firebase.auth)
+
+//    google
+    implementation(libs.play.services.auth)
+//    koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
 
 
 }

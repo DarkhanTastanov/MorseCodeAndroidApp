@@ -1,4 +1,4 @@
-package com.example.morsecode.compose
+package com.example.morsecode.compose.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -9,7 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.morsecode.viewmodel.CodeMaps
+import com.example.domain.languages.CodeMaps
 import com.example.morsecode.viewmodel.MorseCodeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)

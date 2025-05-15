@@ -8,7 +8,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
 import com.example.domain.languages.CodeMaps
 import com.example.domain.soundplayer.MorsePlayer
-import com.example.morsecode.compose.translateToMorseCode
+import com.example.morsecode.compose.screen.translateToMorseCode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
