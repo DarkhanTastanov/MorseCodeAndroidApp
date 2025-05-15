@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1051007049150",
+    "project_id": "my-faith-75df5",
+    "storage_bucket": "my-faith-75df5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1051007049150:android:fa4c621b5b60cbde6badef",
+        "android_client_info": {
+          "package_name": "com.example.morsecode"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1051007049150-tfhn5jp4hv19tokri310tdlkob5ls8tc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.morsecode",
+            "certificate_hash": "c17e5d85de222479f69933566a035a6ac0758d13"
+          }
+        },
+        {
+          "client_id": "1051007049150-8gqvk313s81ml6n1ue8ihuk9n8dclifn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6OekJH_pUSLmdE7_vrop9yHehi64Re9E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1051007049150-8gqvk313s81ml6n1ue8ihuk9n8dclifn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

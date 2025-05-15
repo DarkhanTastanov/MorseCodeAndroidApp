@@ -24,4 +24,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Morse code"
 include(":app")
- 
+include(":domain")
+include(":data")
