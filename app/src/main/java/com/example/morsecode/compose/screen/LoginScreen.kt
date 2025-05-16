@@ -40,7 +40,6 @@ fun LoginScreen(
             val account = task.result
             val idToken = account.idToken
             idToken?.let { authViewModel.signInWithGoogle(it) }
-//            navController.navigate("translator") // Navigate to translator
 
         }
     )
