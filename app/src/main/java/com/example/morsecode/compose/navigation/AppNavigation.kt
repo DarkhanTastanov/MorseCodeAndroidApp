@@ -13,8 +13,10 @@ import com.example.morsecode.compose.screen.ChatsScreen
 import com.example.morsecode.compose.screen.LoginScreen
 import com.example.morsecode.compose.screen.Message
 import com.example.morsecode.compose.screen.MorseCodeTranslatorScreen
+import com.example.morsecode.compose.screen.ProfileScreen
 import com.example.morsecode.viewmodel.AuthViewModel
 import com.example.morsecode.viewmodel.MorseCodeViewModel
+import com.example.morsecode.viewmodel.ProfileViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -22,6 +24,7 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = koinViewModel()
     val morseCodeViewModel: MorseCodeViewModel = viewModel()
+    val profileViewModel: ProfileViewModel = koinViewModel()
 
     Scaffold(
         bottomBar = {
@@ -60,7 +63,12 @@ fun AppNavigation() {
                     }
                 )
             }
-            composable("profile") { /* Profile Screen */ }
+            composable("profile") {
+                ProfileScreen(
+                    viewModel = profileViewModel,
+                    onEditProfile = { /* Navigate to Edit Profile Screen */ },
+                    onAppSettings = { /* Navigate to App Settings Screen */ }
+                )            }
         }
     }
 }

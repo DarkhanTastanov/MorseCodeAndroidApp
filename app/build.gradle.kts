@@ -69,7 +69,8 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.material.icons.extended)
-//
+    implementation(libs.coil.compose)
+
 ////    firebase
     implementation(platform(libs.firebase.bom))
 //    implementation(libs.firebase.firestore.ktx)

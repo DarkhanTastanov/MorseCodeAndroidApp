@@ -6,6 +6,7 @@ import com.example.data.repository.GoogleSignInIntentProviderImpl
 import com.example.domain.repository.AuthRepository
 import com.example.domain.usecase.AuthUseCase
 import com.example.morsecode.viewmodel.AuthViewModel
+import com.example.morsecode.viewmodel.ProfileViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,6 +22,8 @@ val appModule = module {
     single { AuthUseCase(get()) }
 
     single<GoogleSignInIntentProvider> { GoogleSignInIntentProviderImpl(get()) }
+
+    viewModel { ProfileViewModel(get()) }
 
     viewModel { AuthViewModel(get(), get<GoogleSignInIntentProvider>()) }
 }

@@ -14,7 +14,7 @@ class AuthUseCase(private val repository: AuthRepository) {
     }
 
 
-    suspend fun returnAuth(): AuthUser {
-        return repository.returnAuth()
+    suspend fun getCurrentUser(): AuthUser {
+        return repository.getCurrentUser()
     }
 }

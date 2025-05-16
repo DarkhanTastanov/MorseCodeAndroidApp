@@ -2,11 +2,8 @@ package com.example.data.repository
 
 import com.example.domain.model.AuthUser
 import com.example.domain.repository.AuthRepository
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
@@ -46,15 +43,15 @@ class AuthRepositoryImpl(
         }
     }
 
-
-    override suspend fun returnAuth(): AuthUser {
-        val user = Firebase.auth.currentUser
-        return AuthUser(
-            uid = user?.uid,
-            email = user?.email,
-            photoUrl = user?.photoUrl?.toString(),
-            displayName = user?.displayName
-        )
+    override suspend fun getCurrentUser(): AuthUser {
+        val user = firebaseAuth.currentUser
+        return user.let {
+            AuthUser(
+                uid = it?.uid,
+                email = it?.email,
+                photoUrl = it?.photoUrl?.toString(),
+                displayName = it?.displayName
+            )
+        }
     }
-
 }

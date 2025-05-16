@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.remote.GoogleSignInIntentProvider
-import com.example.domain.model.AuthUser
 import com.example.domain.usecase.*
 import kotlinx.coroutines.launch
 
@@ -37,16 +36,7 @@ class AuthViewModel(
     fun getGoogleSignInIntent(): Intent {
         return googleSignInIntentProvider.getGoogleSignInIntent()
     }
-    suspend fun returnAuth(): AuthUser {
-        return authRepository.returnAuth()
-    }
 
-    fun fetchAuthInfo(callback: (AuthUser) -> Unit) {
-        viewModelScope.launch {
-            val authUser = authRepository.returnAuth()
-            callback(authUser)
-        }
-    }
 }
 
 sealed class AuthResult {
