@@ -3,9 +3,13 @@ package com.example.morsecode.di
 import com.example.data.remote.GoogleSignInIntentProvider
 import com.example.data.repository.AuthRepositoryImpl
 import com.example.data.repository.GoogleSignInIntentProviderImpl
+import com.example.data.repository.UserRepositoryImpl
 import com.example.domain.repository.AuthRepository
+import com.example.domain.repository.UserRepository
 import com.example.domain.usecase.AuthUseCase
+import com.example.domain.usecase.SearchUsersUseCase
 import com.example.morsecode.viewmodel.AuthViewModel
+import com.example.morsecode.viewmodel.ChatsViewModel
 import com.example.morsecode.viewmodel.ProfileViewModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -17,13 +21,18 @@ val appModule = module {
     single { Firebase.auth }
     single { FirebaseFirestore.getInstance() }
 
+//    auth
     single<AuthRepository> { AuthRepositoryImpl(get(), get()) }
-
     single { AuthUseCase(get()) }
-
     single<GoogleSignInIntentProvider> { GoogleSignInIntentProviderImpl(get()) }
+    viewModel { AuthViewModel(get(), get<GoogleSignInIntentProvider>()) }
 
+//profile show
     viewModel { ProfileViewModel(get()) }
 
-    viewModel { AuthViewModel(get(), get<GoogleSignInIntentProvider>()) }
+//user search
+    single<UserRepository> { UserRepositoryImpl(get()) }
+    factory { SearchUsersUseCase(get()) }
+    viewModel { ChatsViewModel(get()) }
+
 }

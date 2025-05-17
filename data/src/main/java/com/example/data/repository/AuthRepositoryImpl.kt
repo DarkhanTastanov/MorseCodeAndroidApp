@@ -50,7 +50,7 @@ class AuthRepositoryImpl(
                 uid = it?.uid,
                 email = it?.email,
                 photoUrl = it?.photoUrl?.toString(),
-                displayName = it?.displayName
+                name = it?.displayName
             )
         }
     }
