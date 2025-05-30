@@ -19,9 +19,12 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,21 +34,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.example.domain.model.Message
+import com.example.morsecode.viewmodel.ChatsViewModel
 
 @Composable
 fun ChatScreen(
-    chatName: String,
-    messages: List<Message>,
-    onSendMessage: (String) -> Unit
+    chatId: String,
+    chatsViewModel: ChatsViewModel,
+    userId: String // Pass current user ID
 ) {
+    val messages by chatsViewModel.messages.collectAsState()
     var messageText by remember { mutableStateOf("") }
+
+    LaunchedEffect(chatId) {
+        chatsViewModel.loadMessages(chatId)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)
     ) {
         Text(
-            text = chatName,
+            text = "Chat with $chatId",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(8.dp)
         )
@@ -53,10 +64,13 @@ fun ChatScreen(
 
         LazyColumn(
             modifier = Modifier.weight(1f),
-            reverseLayout = true // Start from the bottom for chat experience
+            reverseLayout = true
         ) {
             items(messages) { message ->
-                MessageBubble(message)
+                MessageBubble(
+                    message = message,
+                    isCurrentUser = message.senderId == userId
+                )
             }
         }
 
@@ -75,7 +89,13 @@ fun ChatScreen(
             Spacer(modifier = Modifier.width(8.dp))
             IconButton(onClick = {
                 if (messageText.isNotBlank()) {
-                    onSendMessage(messageText)
+                    val message = Message(
+                        text = messageText,
+
+                        senderId = userId, // Current user ID
+                        timestamp = System.currentTimeMillis()
+                    )
+                    chatsViewModel.sendMessage(chatId, message)
                     messageText = ""
                 }
             }) {
@@ -86,47 +106,22 @@ fun ChatScreen(
 }
 
 @Composable
-fun MessageBubble(message: Message) {
-    Row(
+fun MessageBubble(message: Message, isCurrentUser: Boolean) {
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        horizontalArrangement = if (message.isSentByMe) Arrangement.End else Arrangement.Start
+            .padding(4.dp),
+        contentAlignment = if (isCurrentUser) Alignment.CenterEnd else Alignment.CenterStart
     ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    if (message.isSentByMe) MaterialTheme.colorScheme.primary else Color.Gray,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .padding(12.dp)
+        Surface(
+            shape = RoundedCornerShape(8.dp),
+            color = if (isCurrentUser) Color(0xFFDCF8C6) else Color(0xFFEFEFEF)
         ) {
             Text(
                 text = message.text,
-                color = if (message.isSentByMe) Color.White else Color.Black,
+                modifier = Modifier.padding(8.dp),
                 style = MaterialTheme.typography.bodyMedium
             )
         }
     }
-}
-
-data class Message(
-    val text: String,
-    val isSentByMe: Boolean
-)
-
-@Preview
-@Composable
-fun PreviewChatScreen() {
-    val sampleMessages = listOf(
-        Message("Hello! How are you?", false),
-        Message("I'm good, thanks! You?", true),
-        Message("All good here too.", false),
-        Message("That's great to hear!", true)
-    )
-    ChatScreen(
-        chatName = "John Doe",
-        messages = sampleMessages,
-        onSendMessage = {}
-    )
 }

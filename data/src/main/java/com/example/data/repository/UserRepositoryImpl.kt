@@ -10,18 +10,21 @@ class UserRepositoryImpl(
 ) : UserRepository {
 
     override suspend fun searchUsers(query: String): List<AuthUser> {
-        val users = mutableListOf<AuthUser>()
-        val snapshot = firestore.collection("users")
-            .whereGreaterThanOrEqualTo("name", query)
-            .whereLessThanOrEqualTo("name", query + "\uf8ff")
-            .get()
-            .await()
+        if (query.isBlank()) return emptyList()
 
-        for (document in snapshot.documents) {
-            val user = document.toObject(AuthUser::class.java)
-            user?.let { users.add(it) }
+        return try {
+            val snapshot = firestore.collection("users")
+                .get()
+                .await()
+
+            snapshot.documents.mapNotNull { doc ->
+                doc.toObject(AuthUser::class.java)
+            }.filter { user ->
+                user.name?.contains(query, ignoreCase = true) == true ||
+                        user.email?.contains(query, ignoreCase = true) == true
+            }
+        } catch (e: Exception) {
+            emptyList()
         }
-
-        return users
     }
 }

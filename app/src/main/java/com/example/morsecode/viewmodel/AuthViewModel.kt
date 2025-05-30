@@ -37,6 +37,8 @@ class AuthViewModel(
         return googleSignInIntentProvider.getGoogleSignInIntent()
     }
 
+    suspend fun getCurrentUserId(): String? = authRepository.getCurrentUser().uid
+
 }
 
 sealed class AuthResult {
